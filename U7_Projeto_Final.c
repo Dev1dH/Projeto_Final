@@ -10,7 +10,6 @@
 
 // Bibliotecas Utilizadas
 #include <stdio.h>              //
-#include <stdlib.h>             //
 #include "pico/stdlib.h"        //    
 #include "hardware/adc.h"       //
 #include "hardware/i2c.h"       //
@@ -20,21 +19,27 @@
 #include "buzzer/buzzer.h"      //
 
 // Definação de pinagens
-#define ENDERECO 0x3C      // (a fazer)
-#define I2C_PORT i2c1      // (a fazer)
-#define I2C_SDA    14      // Pinagem do SDA
-#define I2C_SCL    15      // Pinagem do SCL  
-#define JOYSTICK_X 26      // Pinagem do eixo x do joystick
-#define LED_RED    13      // Pinagem do LED vermelho
-#define LED_BLUE   12      // Pinagem do LED azul 
-#define LED_GREEN  11      // Pinagem do LED verde 
-#define BUZZER_A   21      // Pinagem do buzzer A
+
+#define I2C_PORT  i2c1        // (a fazer)
+#define UART_ID   uart0       // Seleciona a UART0
+#define ENDERECO   0x3C       // (a fazer)
+#define BAUD_RATE 115200      // Define a taxa de transmissão
+#define UART_TX     0         // Pino GPIO usado para TX
+#define UART_RX     1         // Pino GPIO usado para RX
+#define I2C_SDA    14         // Pinagem do SDA
+#define I2C_SCL    15         // Pinagem do SCL  
+#define JOYSTICK_Y 26         // Pinagem do eixo x do joystick
+#define LED_RED    13         // Pinagem do LED vermelho
+#define LED_BLUE   12         // Pinagem do LED azul 
+#define LED_GREEN  11         // Pinagem do LED verde 
+#define BUZZER_A   21         // Pinagem do buzzer A
 
 // Variáveis Globais
 ssd1306_t ssd;    // Inicializa a estrutura do display
-bool cor = true;  // Variável booleana para define cor dos LED e display  
 
-// Protópico das Funções Criadas
+bool cor = true;// Variável booleana para define cor dos LEDs e display  
+
+// Protópico das funções Criadas
 void level_zero();
 void level_um();
 void level_dois();
@@ -44,34 +49,37 @@ void level_cinco();
 void setup_display();
 void setup_leds();
 void led_alerta();
-void message_display(char c[5],char valor[5], bool cor_20, bool cor_40, bool cor_60, bool cor_80, bool cor_100);
 void leds_turn_on(bool light_red, bool light_blue, bool light_green);
+void message_display(char c[5],char valor[5], bool cor_20, bool cor_40, bool cor_60, bool cor_80, bool cor_100);
 
 // Função Principal
 int main()
 {
   
-  setup_display();              // Configura o display
-  setup_leds();                 // Configura os LEDs
-  pwm_init_buzzer(BUZZER_A );   // Inicializa o buzzer A no PWM
-  adc_init();                   // Inicializa o conversor analógico-digital
-  adc_gpio_init(JOYSTICK_X);    // Define o eixo x do joystick na conversão analógico-digital
-  
+  setup_display();                       // Configura o display
+  setup_leds();                          // Configura os LEDs
+  pwm_init_buzzer(BUZZER_A );            // Inicializa o buzzer A no PWM
+  adc_init();                            // Inicializa o conversor analógico-digital
+  adc_gpio_init(JOYSTICK_Y);             // Define o eixo x do joystick na conversão analógico-digital
+  uart_init(UART_ID, BAUD_RATE);                // Inicializa a UART
+  gpio_set_function(UART_TX, GPIO_FUNC_UART);   // Configura o pino 0 para TX
+  gpio_set_function(UART_RX, GPIO_FUNC_UART);   // Configura o pino 1 para RX
+
   // Loop principal
   while (true)
   {
 
     // Definindo variável do tipo inteiro de 16 bits
-    uint16_t adc_value_x;
+    uint16_t adc_value_y;
    
     // Buffer para armazenar a string    
-    char str_x[5]; 
+    char str_y[5]; 
 
     // Seleciona o ADC para eixo X do joystick
     adc_select_input(0);   
     
     // Variável para armazenar o valor lido no ADC do joystick
-    adc_value_x = adc_read();  
+    adc_value_y = adc_read();  
     
     /*Valor mínimo lido no ADC (Joystick na posição central)
     valor é um pouco menor que 2048 para garantir que variações 
@@ -84,50 +92,53 @@ int main()
     float adc_max = 4100.0;    
     
     // Obtém o valor em percentual do nível do nível ADC
-    uint16_t level_msg = ((adc_max - adc_value_x)/adc_min)*100;
+    uint16_t level_msg = ((adc_max - adc_value_y)/adc_min)*100;
     
     // Converte o inteiro em string
-    sprintf(str_x, "%d", level_msg);  
-
+    sprintf(str_y, "%d", level_msg);  
+    
+    // Exibe no monitor serial o valor atual do ADC como teste de validação
+    printf("ADC do joystick: %d\n", adc_value_y);
+    
     // Executa uma função com base no valor do adc
-    if(adc_value_x > 2000 && adc_value_x <=2450){
+    if(adc_value_y > 2000 && adc_value_y <=2450){
       // Imprime a mensagem "TANQUE CHEIO" no display e o nível em % do nível do reservatório
-      message_display("TANQUE CHEIO",str_x, cor, cor, cor, cor, cor);
+      message_display("TANQUE CHEIO",str_y, cor, cor, cor, cor, cor);
       level_cinco();                  // Nível cinco na matriz de LEDs
       leds_turn_on(!cor, !cor, cor);  // Luz verde ligada
     }
 
-    else if(adc_value_x >2450 && adc_value_x <=2863){
+    else if(adc_value_y >2450 && adc_value_y <=2863){
       // Imprime a mensagem "TANQUE CHEIO" no display e o nível em % do nível do reservatório
-      message_display("TANQUE CHEIO",str_x, cor, cor, cor, cor, !cor);
+      message_display("TANQUE CHEIO",str_y, cor, cor, cor, cor, !cor);
       level_quatro();                 // Nível quatro na matriz de LEDs
       leds_turn_on(!cor, !cor, cor);  // Luz verde ligada
     }
 
-    else if(adc_value_x > 2863 && adc_value_x<=3272){
+    else if(adc_value_y > 2863 && adc_value_y<=3272){
       // Imprime a mensagem "TANQUE MEDIO" no display e o nível em % do nível do reservatório
-      message_display("TANQUE MEDIO",str_x, cor, cor, cor, !cor, !cor);
+      message_display("TANQUE MEDIO",str_y, cor, cor, cor, !cor, !cor);
       level_tres();                 // Nível três na matriz de LEDs
       leds_turn_on(cor, !cor, cor); // Luz amarela ligada
     }
 
-    else if(adc_value_x >3272 && adc_value_x<=3670){
+    else if(adc_value_y >3272 && adc_value_y<=3670){
       // Imprime a mensagem "TANQUE MEDIO" no display e o nível em % do nível do reservatório
-      message_display("TANQUE MEDIO",str_x, cor, cor, !cor, !cor, !cor);
+      message_display("TANQUE MEDIO",str_y, cor, cor, !cor, !cor, !cor);
       level_dois();                 // Nível dois na matriz de LEDs
       leds_turn_on(cor, !cor, cor); // Luz amarela ligada
     }
 
-    else if(adc_value_x >3670 && adc_value_x < 4070){
+    else if(adc_value_y >3670 && adc_value_y < 4070){
       // Imprime a mensagem "TANQUE BAIXO" no display e o nível em % do nível do reservatório
-      message_display("TANQUE BAIXO",str_x, cor, !cor, !cor, !cor, !cor); 
+      message_display("TANQUE BAIXO",str_y, cor, !cor, !cor, !cor, !cor); 
       level_um();                     // Nível um na matriz de LEDs
       leds_turn_on(cor, !cor, !cor);  // Luz vermelha ligado      
     }
 
     else{
       // Imprime a mensagem "TANQUE VAZIO" no display e o nível em % do nível do reservatório
-      message_display("TANQUE VAZIO",str_x, !cor, !cor, !cor, !cor, !cor);
+      message_display("TANQUE VAZIO",str_y, !cor, !cor, !cor, !cor, !cor);
       level_zero();         // Nivel zero na matriz de LEDs
       led_alerta();         // Alerta do pisca LED vermelho
       beep(BUZZER_A, 1000); // Alerta sonoro do buzzer a cada 1000 ms (1s)
