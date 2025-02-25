@@ -19,7 +19,7 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 
 ## Arquivos 
 
-- 'CMakeLists.txt'
+- `CMakeLists.txt`
 
 ## Bibliotecas
 
