@@ -50,7 +50,8 @@ target_link_libraries(U7_Projeto_Final
         hardware_i2c 
         hardware_adc
         hardware_pio
-        hardware_pwm)
+        hardware_pwm
+        hardware_uart)
 
 # Add the standard include files to the build
 target_include_directories(U7_Projeto_Final PRIVATE
