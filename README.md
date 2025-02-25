@@ -47,8 +47,39 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 ## Blocos de funções
 
 ```C
+// Função que define se os LEDs RGB estão acesos ou apagados
 void leds_turn_on(bool light_red, bool light_blue, bool light_green){
   gpio_put(LED_RED, light_red);
   gpio_put(LED_BLUE, light_blue);
   gpio_put(LED_GREEN, light_green);
 }
+
+```C
+// Função para configurar os LEDs
+void setup_leds(){
+  
+  stdio_init_all();
+  gpio_init(LED_RED);                   // Inicializa a GPIO do LED vermelhor
+  gpio_init(LED_BLUE);                  // Inicializa a GPIO do LED azul    
+  gpio_init(LED_GREEN);                 // Inicializa a GPIO do LED verde
+  gpio_set_dir(LED_RED, GPIO_OUT);      // Define o LED vermelho como uma saída GPIO
+  gpio_set_dir(LED_BLUE, GPIO_OUT);     // Define o LED azul como uma saída GPIO
+  gpio_set_dir(LED_GREEN, GPIO_OUT);    // Define o LED verde com uma saída GPIO
+  npInit(LED_PIN);                      // Inicializa a matriz de LEDs
+  npClear();
+}
+
+```C
+// Função para configurar os LEDs
+void setup_leds(){
+  stdio_init_all();
+  gpio_init(LED_RED);                   // Inicializa a GPIO do LED vermelhor
+  gpio_init(LED_BLUE);                  // Inicializa a GPIO do LED azul    
+  gpio_init(LED_GREEN);                 // Inicializa a GPIO do LED verde
+  gpio_set_dir(LED_RED, GPIO_OUT);      // Define o LED vermelho como uma saída GPIO
+  gpio_set_dir(LED_BLUE, GPIO_OUT);     // Define o LED azul como uma saída GPIO
+  gpio_set_dir(LED_GREEN, GPIO_OUT);    // Define o LED verde com uma saída GPIO
+  npInit(LED_PIN);                      // Inicializa a matriz de LEDs
+  npClear();
+}
+
