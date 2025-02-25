@@ -60,8 +60,11 @@ void setup_leds(){
   npInit(LED_PIN);                      // Inicializa a matriz de LEDs
   npClear();
 }
+```
+Com isso nós podemos ve que a função é esta
 
-```markdown
+
+
 ```C
 // Função para configurar o display no i2c
 void setup_display(){
