@@ -20,7 +20,11 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 ## Arquivos 
 
 - `CMakeLists.txt`
+- `U7_Projeto_Final.c`
+- `pico_sdk_import.cmake`
+- `ws2818b.pio`
 
+  
 ## Bibliotecas
 
 1 - “pico/stdlib.h” : Biblioteca específica da Raspberry Pi Pico fornecida pela Pico SDk, é responsável pela manipulação de GPIOs, inicialização do sistema, delays, dentre outros.
