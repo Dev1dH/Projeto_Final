@@ -2,6 +2,8 @@
 
 https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 
+
+
 ## Periféricos
 1 - Buzzer A: conectado a GPIO 21, emite um sinal sonoro ajustado com o PWM.
 
@@ -14,6 +16,10 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 5 - SDA (Serial Data): Conectado a GPIO 14, é responsável por transferir e receber informações do barramento I2C do display OLED.
 
 6 - SCL: (Serial Clock): Conectado a GPIO 15, é responsável por sincronizar o clock da comunicação do display ao barramento I2C.
+
+## Arquivos 
+
+- 'CMakeLists.txt'
 
 ## Bibliotecas
 
