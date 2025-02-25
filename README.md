@@ -52,7 +52,7 @@ void leds_turn_on(bool light_red, bool light_blue, bool light_green){
   gpio_put(LED_RED, light_red);
   gpio_put(LED_BLUE, light_blue);
   gpio_put(LED_GREEN, light_green);
-}
+}```C
 
 Aqui temos a função para configurar os LED
 
