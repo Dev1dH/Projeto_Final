@@ -24,7 +24,6 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 - `pico_sdk_import.cmake`
 - `ws2818b.pio`
 
-  
 ## Bibliotecas
 
 1 - “pico/stdlib.h” : Biblioteca específica da Raspberry Pi Pico fornecida pela Pico SDk, é responsável pela manipulação de GPIOs, inicialização do sistema, delays, dentre outros.
@@ -44,3 +43,12 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 8 - “hardware/pwm” : Biblioteca responsável pela Modulação por Largura de Pulso (PWM) para as saídas GPIOs, permitindo controlar a intensidade de LEDs e buzzers.
 
 9 - “hardware/clocks.h”: Biblioteca que permite configurar e manipular os clocks no microcontrolador RP2040.
+
+## Blocos de funções
+
+```C
+void leds_turn_on(bool light_red, bool light_blue, bool light_green){
+  gpio_put(LED_RED, light_red);
+  gpio_put(LED_BLUE, light_blue);
+  gpio_put(LED_GREEN, light_green);
+}
