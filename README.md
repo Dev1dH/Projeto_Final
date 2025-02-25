@@ -54,6 +54,8 @@ void leds_turn_on(bool light_red, bool light_blue, bool light_green){
   gpio_put(LED_GREEN, light_green);
 }
 
+Aqui temos a função para configurar os LED
+
 ```C
 // Função para configurar os LEDs
 void setup_leds(){
@@ -69,6 +71,7 @@ void setup_leds(){
   npClear();
 }
 
+Função para configurar os LEDs
 ```C
 // Função para configurar os LEDs
 void setup_leds(){
