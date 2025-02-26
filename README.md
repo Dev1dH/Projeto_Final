@@ -2,7 +2,7 @@
 
 O projeto em questão consiste em um sensor de nível de água para tanques e/ou reservatórios, que sinaliza por meio de uma matriz de LEDs e pelo display OLED o nível da água, este último, inclusive, sinalizando tanto barras cuja a cor indica o nível aproximada, quando pelo valor em percentual do reservatório. Além disso, uma mensagem no display descreve a situação atual (cheio, médio, vazio). Os LEDs RGB também possuem papel importante na sinalização, indicando por meio da luz verde um volume alto no reservatório, amarelo um volume baixo e em vermelho, piscando e ao som de um alerta emitido pelo buzzer o nível crítico no reservatório.
 
-O vídeo completo de demonstração no youtube: https://youtu.be/bWMproWeIz
+O vídeo completo de demonstração no youtube: https://youtu.be/bWMproWeIz8
 
 https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 
