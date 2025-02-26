@@ -20,10 +20,10 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 
 ## Arquivos 
 
-- `CMakeLists.txt`
-- `U7_Projeto_Final.c`
-- `pico_sdk_import.cmake`
-- `ws2818b.pio`
+- `CMakeLists.txt`: arquivo responsável pela compilação e configuração do projeto.
+- `U7_Projeto_Final.c`: arquivo executável que carrega o programa principal.
+- `pico_sdk_import.cmake`: arquivo responsável por importar e configurar a Pico SDK.
+- `ws2818b.pio`: arquivo responsável pela configuração do arquivo .pio da matriz de LEDs. 
 
 ## Bibliotecas
 
@@ -62,10 +62,8 @@ void setup_leds(){
   npClear();
 }
 ```
-Com isso nós podemos ve que a função é esta
 
-
-
+```markdown
 ```C
 // Função para configurar o display no i2c
 void setup_display(){
