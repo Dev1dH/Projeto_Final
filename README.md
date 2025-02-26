@@ -130,4 +130,87 @@ void level_dois(){
   npClear();
 }
 ```
+Dentro do main, o lool infinito verifica continuamente o valor lido pelo conversor analógico-digital (ADC). De acordo com o valor ADC é executada uma das condições, como é possível verificar abaixo:
 
+```C
+// Loop principal
+  while (true)
+  {
+
+    // Definindo variável do tipo inteiro de 16 bits
+    uint16_t adc_value_y;
+   
+    // Buffer para armazenar a string    
+    char str_y[5]; 
+
+    // Seleciona o ADC para eixo X do joystick
+    adc_select_input(0);   
+    
+    // Variável para armazenar o valor lido no ADC do joystick
+    adc_value_y = adc_read();  
+    
+    /*Valor mínimo lido no ADC (Joystick na posição central)
+    valor é um pouco menor que 2048 para garantir que variações 
+    para menos não atrapalhem a medição*/
+    float adc_min = 2035.0; 
+    
+    /*Valor máximo lido no ADC (Joystick no máximo valor do eixo x)   
+    valor um pouco maior que 4096 para garantir que varições para mais
+    não atrapalhem a leitura*/
+    float adc_max = 4100.0;    
+    
+    // Obtém o valor em percentual do nível do nível ADC
+    uint16_t level_msg = ((adc_max - adc_value_y)/adc_min)*100;
+    
+    // Converte o inteiro em string
+    sprintf(str_y, "%d", level_msg);  
+    
+    // Exibe no monitor serial o valor atual do ADC como teste de validação
+    printf("ADC do joystick: %d\n", adc_value_y);
+    
+    // Executa uma função com base no valor do adc
+    if(adc_value_y > 2000 && adc_value_y <=2450){
+      // Imprime a mensagem "TANQUE CHEIO" no display e o nível em % do nível do reservatório
+      message_display("TANQUE CHEIO",str_y, cor, cor, cor, cor, cor);
+      level_cinco();                  // Nível cinco na matriz de LEDs
+      leds_turn_on(!cor, !cor, cor);  // Luz verde ligada
+    }
+
+    else if(adc_value_y >2450 && adc_value_y <=2863){
+      // Imprime a mensagem "TANQUE CHEIO" no display e o nível em % do nível do reservatório
+      message_display("TANQUE CHEIO",str_y, cor, cor, cor, cor, !cor);
+      level_quatro();                 // Nível quatro na matriz de LEDs
+      leds_turn_on(!cor, !cor, cor);  // Luz verde ligada
+    }
+
+    else if(adc_value_y > 2863 && adc_value_y<=3272){
+      // Imprime a mensagem "TANQUE MEDIO" no display e o nível em % do nível do reservatório
+      message_display("TANQUE MEDIO",str_y, cor, cor, cor, !cor, !cor);
+      level_tres();                 // Nível três na matriz de LEDs
+      leds_turn_on(cor, !cor, cor); // Luz amarela ligada
+    }
+
+    else if(adc_value_y >3272 && adc_value_y<=3670){
+      // Imprime a mensagem "TANQUE MEDIO" no display e o nível em % do nível do reservatório
+      message_display("TANQUE MEDIO",str_y, cor, cor, !cor, !cor, !cor);
+      level_dois();                 // Nível dois na matriz de LEDs
+      leds_turn_on(cor, !cor, cor); // Luz amarela ligada
+    }
+
+    else if(adc_value_y >3670 && adc_value_y < 4070){
+      // Imprime a mensagem "TANQUE BAIXO" no display e o nível em % do nível do reservatório
+      message_display("TANQUE BAIXO",str_y, cor, !cor, !cor, !cor, !cor); 
+      level_um();                     // Nível um na matriz de LEDs
+      leds_turn_on(cor, !cor, !cor);  // Luz vermelha ligado      
+    }
+
+    else{
+      // Imprime a mensagem "TANQUE VAZIO" no display e o nível em % do nível do reservatório
+      message_display("TANQUE VAZIO",str_y, !cor, !cor, !cor, !cor, !cor);
+      level_zero();         // Nivel zero na matriz de LEDs
+      led_alerta();         // Alerta do pisca LED vermelho
+      beep(BUZZER_A, 1000); // Alerta sonoro do buzzer a cada 1000 ms (1s)
+    }
+    
+  }
+```
