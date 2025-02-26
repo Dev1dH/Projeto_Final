@@ -52,7 +52,7 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 Podemos dividir o software em algumas camadas de acordo com as funções desempenhadas. Inicialmente, podemos destacas as funções para configuração (setup) dos LEDs e do display.
 
 ```markdown
-```C
+```
 // Função para configurar os LEDs
 void setup_leds(){
   stdio_init_all();
@@ -89,7 +89,7 @@ void setup_display(){
 As demais funções são, essencialmente, responsáveis pela manipulação dos LEDs e display. Abaixo destacam-se estas funções:
 
 ```markdown
-```C
+```
 // Função para piscar o LED vermelho em alerta
 void led_alerta(){
       gpio_put(LED_RED, true);    // LED vermelho aceso
