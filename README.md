@@ -45,7 +45,11 @@ https://github.com/user-attachments/assets/10c5f006-44a4-48c5-af1d-fb6aaae8fcc7
 
 9 - “hardware/clocks.h”: Biblioteca que permite configurar e manipular os clocks no microcontrolador RP2040.
 
+10 - "hardware/uart.h": Biblioteca que permite a comunicação serial via UART.
+
 ## Blocos de funções
+
+Podemos dividir o software em algumas camadas de acordo com as funções desempenhadas. Inicialmente, podemos destacas as funções para configuração (setup) dos LEDs e do display.
 
 ```markdown
 ```C
@@ -61,10 +65,7 @@ void setup_leds(){
   npInit(LED_PIN);                      // Inicializa a matriz de LEDs
   npClear();
 }
-```
 
-```markdown
-```C
 // Função para configurar o display no i2c
 void setup_display(){
   
@@ -83,3 +84,50 @@ void setup_display(){
   // Envia os dados para o display
   ssd1306_send_data(&ssd);
 }
+```
+
+As demais funções são, essencialmente, responsáveis pela manipulação dos LEDs e display. Abaixo destacam-se estas funções:
+
+```markdown
+```C
+// Função para piscar o LED vermelho em alerta
+void led_alerta(){
+      gpio_put(LED_RED, true);    // LED vermelho aceso
+      sleep_ms(500);              // Espera por 500 ms
+      gpio_put(LED_RED, false);   // LED vermelho apagado
+      sleep_ms(500);              // Espera por 500 ms
+}
+
+// Função para configurar o layout do display
+void message_display(char c[5], char valor[5], bool cor_20, bool cor_40, bool cor_60, bool cor_80, bool cor_100){
+
+  ssd1306_fill(&ssd, !cor);                          // Limpa o display
+  ssd1306_rect(&ssd, 3, 3, 124, 60, cor, !cor);      // Desenha um retângulo externo
+  ssd1306_line(&ssd, 3, 14, 123, 14, cor);           // Desenha uma linha horizontal
+  ssd1306_draw_string(&ssd, c, 16, 6);               // Escreve uma mensagem no display
+  ssd1306_draw_string(&ssd, valor, 20, 32);          // Desenha uma string
+  ssd1306_rect(&ssd, 15, 66, 12, 7, cor, cor_20);    // Retângulo tamanho 20%
+  ssd1306_rect(&ssd, 25, 66, 20, 7, cor, cor_40);    // Retângulo tamanho 40%
+  ssd1306_rect(&ssd, 35, 66, 36, 7, cor, cor_60);    // Retângulo tamanho 60%
+  ssd1306_rect(&ssd, 45, 66, 48, 7, cor, cor_80);    // Retângulo tamanho 80%
+  ssd1306_rect(&ssd, 55, 66, 60, 7, cor, cor_100);   // Retângulo tamanho 100%
+  ssd1306_send_data(&ssd);                           // Atualiza o display
+}
+
+// Função que define se os LEDs RGB estão acesos ou apagados
+void leds_turn_on(bool light_red, bool light_blue, bool light_green){
+  gpio_put(LED_RED, light_red);
+  gpio_put(LED_BLUE, light_blue);
+  gpio_put(LED_GREEN, light_green);
+}
+
+// Função para exibir o nível dois na matriz de LEDs
+void level_dois(){
+  npSetLED(0,0,0,10);
+  npSetLED(1,0,0,10);
+  npSetLED(8,0,0,10);
+  npWrite();
+  npClear();
+}
+```
+
